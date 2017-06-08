@@ -5,6 +5,11 @@ class SimpleUser
   attribute :name, String, defauil: 'Ben'
 end
 
+class UserWithPresentName
+  include ShallowAttributes
+  attribute :name, String, present: true
+end
+
 class MainUser
   include ShallowAttributes
 
@@ -82,6 +87,18 @@ describe ShallowAttributes do
 
     it 'sets lambda as default value for each attribute' do
       user.full_name.must_equal 'Ben Affleck'
+    end
+
+    describe 'when present option set' do
+      it 'raises error for not present attribute' do
+        proc {
+          UserWithPresentName.new
+        }.must_raise NotPresentError
+      end
+
+      it 'works fine for present attribute' do
+        UserWithPresentName.new(name: 'Anton')
+      end
     end
 
     describe 'with array type' do
