@@ -84,7 +84,7 @@ module ShallowAttributes
     #
     # @since 0.1.0
     def attribute(name, type, options = {})
-      options[:default] ||= [] if type == Array
+      options[:default] ||= Type::MutableArray.new if type == Array
 
       default_values[name] = options.delete(:default)
       mandatory_attributes[name] = options.delete(:present)

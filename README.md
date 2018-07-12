@@ -310,8 +310,10 @@ user.attributes
 
 ### IMPORTANT note about member coercions
 
-ShallowAttributes performs coercions only when a value is being assigned. If you mutate the value
-later on using its own interfaces then coercion won't be triggered.
+ShallowAttributes guarantee coercions only when a value is being assigned. If you mutate the value
+later on using its own interfaces then coercion may not be triggered.
+
+But ShallowAttributes uses `MutableArray < Array` with redefined mutation methods for `Array`s.
 
 Here's an example:
 
@@ -331,7 +333,7 @@ library = Library.new
 # This will coerce Hash to a Book instance
 library.books = [ { :title => 'Introduction' } ]
 
-# This WILL NOT COERCE the value because you mutate the books array with Array#<<
+# This WILL COERCE the value because ShallowAttributes uses `MutableArray < Array` with redefined `#<<`
 library.books << { :title => 'Another Introduction' }
 ```
 

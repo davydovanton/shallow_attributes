@@ -27,16 +27,7 @@ module ShallowAttributes
         unless values.is_a? ::Array
           raise ShallowAttributes::Type::InvalidValueError, %(Invalid value "#{values}" for type "Array")
         end
-        values.map! do |value|
-          ShallowAttributes::Type.coerce(item_klass(options[:of]), value)
-        end
-      end
-
-      private
-
-      def item_klass(klass)
-        return klass unless klass.is_a? ::String
-        Object.const_get(klass)
+        MutableArray.new(values, **options)
       end
     end
   end

@@ -105,6 +105,64 @@ describe ShallowAttributes do
         person.addresses[0].must_be_instance_of Address
       end
 
+      describe 'change array by embedded values' do
+        it 'works for #<<' do
+          person.addresses << { street: 'Street 4/2', city: { name: 'Berlin' } }
+
+          person.addresses.must_be_kind_of Array
+          person.addresses[2].must_be_instance_of Address
+
+          person.addresses[2].street.must_be_instance_of String
+          person.addresses[2].street.must_equal 'Street 4/2'
+
+          person.addresses[2].city.must_be_instance_of City
+          person.addresses[2].city.name.must_equal 'Berlin'
+        end
+
+        it 'works for #push' do
+          person.addresses.push street: 'Street 4/2', city: { name: 'Berlin' }
+
+          person.addresses.must_be_kind_of Array
+          person.addresses[2].must_be_instance_of Address
+
+          person.addresses[2].street.must_be_instance_of String
+          person.addresses[2].street.must_equal 'Street 4/2'
+
+          person.addresses[2].city.must_be_instance_of City
+          person.addresses[2].city.name.must_equal 'Berlin'
+        end
+
+        it 'works for #concat' do
+          person.addresses.concat [
+            { street: 'Street 4/2', city: { name: 'Berlin' } }
+          ]
+
+          person.addresses.must_be_kind_of Array
+          person.addresses[2].must_be_instance_of Address
+
+          person.addresses[2].street.must_be_instance_of String
+          person.addresses[2].street.must_equal 'Street 4/2'
+
+          person.addresses[2].city.must_be_instance_of City
+          person.addresses[2].city.name.must_equal 'Berlin'
+        end
+
+        it 'works for #replace' do
+          person.addresses.replace [
+            { street: 'Street 4/2', city: { name: 'Berlin' } }
+          ]
+
+          person.addresses.must_be_kind_of Array
+          person.addresses[0].must_be_instance_of Address
+
+          person.addresses[0].street.must_be_instance_of String
+          person.addresses[0].street.must_equal 'Street 4/2'
+
+          person.addresses[0].city.must_be_instance_of City
+          person.addresses[0].city.name.must_equal 'Berlin'
+        end
+      end
+
       describe '#attributes' do
         it 'returns attributes hash' do
           hash = person.attributes
