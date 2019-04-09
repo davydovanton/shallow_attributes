@@ -77,10 +77,6 @@ describe ShallowAttributes::Type::Time do
 
         err = -> { type.coerce(Class) }.must_raise ShallowAttributes::Type::InvalidValueError
         err.message.must_equal %(Invalid value "Class" for type "Time")
-
-        err = -> { type.coerce(Class.new) }.must_raise ShallowAttributes::Type::InvalidValueError
-        err.message.must_match 'Invalid value "#<Class:'
-        err.message.must_match '" for type "Time"'
       end
     end
   end
