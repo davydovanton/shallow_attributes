@@ -27,7 +27,16 @@ describe ShallowAttributes::Type::Array do
       end
     end
 
-    describe 'when value is Array' do
+    describe 'when value is Array of specified types' do
+      let(:arbitrary_class) { Class.new }
+      let(:arbitrary_value) { arbitrary_class.new }
+
+      it 'returns array of non-coerced values' do
+        type.coerce([arbitrary_value], of: arbitrary_class).must_equal [arbitrary_value]
+      end
+    end
+
+    describe 'when value is Array of non-specified types' do
       it 'returns array of specific type' do
         type.coerce([], of: Integer).must_equal []
         type.coerce(['1', '2'], of: Integer).must_equal [1, 2]
