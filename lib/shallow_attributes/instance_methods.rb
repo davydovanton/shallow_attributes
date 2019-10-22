@@ -139,7 +139,13 @@ module ShallowAttributes
     #
     # @since 0.1.0
     def coerce(value, _options = {})
-      self.attributes = value
+      self.attributes =
+        if value.class.included_modules.include?(ShallowAttributes)
+          value.to_h
+        else
+          value
+        end
+
       self
     end
 

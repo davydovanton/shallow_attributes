@@ -58,23 +58,22 @@ describe ShallowAttributes do
     end
 
     describe 'when one of attribute is array' do
-      let(:person) do
-        Person.new(
-          addresses: [
-            {
-              street: 'Street 1/2',
-              city: {
-                name: 'NYC'
-              }
-            },
-            {
-              street: 'Street 3/2',
-              city: {
-                name: 'Moscow'
-              }
-            }
-          ]
-        )
+      let(:person) { Person.new addresses: [address_1, address_2] }
+      let(:address_1) do
+        {
+          street: 'Street 1/2',
+          city: {
+            name: 'NYC'
+          }
+        }
+      end
+      let(:address_2) do
+        {
+          street: 'Street 3/2',
+          city: {
+            name: 'Moscow'
+          }
+        }
       end
 
       it 'allows embedded values' do
@@ -103,6 +102,35 @@ describe ShallowAttributes do
       it 'does not change the attribute type after call the method #attributes' do
         person.attributes
         person.addresses[0].must_be_instance_of Address
+      end
+
+      describe 'array of ShallowAttributes objects' do
+        let(:address_1) do
+          Address.new(
+            street: 'Street 1/2',
+            city: {
+              name: 'NYC'
+            }
+          )
+        end
+        let(:address_2) do
+          Address.new(
+            street: 'Street 3/2',
+            city: {
+              name: 'Moscow'
+            }
+          )
+        end
+
+        it 'allows embedded ShallowAttributes objects' do
+          person.addresses.count.must_equal 2
+
+          person.addresses[0].street.must_equal 'Street 1/2'
+          person.addresses[0].city.name.must_equal 'NYC'
+
+          person.addresses[1].street.must_equal 'Street 3/2'
+          person.addresses[1].city.name.must_equal 'Moscow'
+        end
       end
 
       describe '#attributes' do
