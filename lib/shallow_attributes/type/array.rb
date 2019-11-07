@@ -28,7 +28,8 @@ module ShallowAttributes
           raise ShallowAttributes::Type::InvalidValueError, %(Invalid value "#{values}" for type "Array")
         end
         values.map! do |value|
-          ShallowAttributes::Type.coerce(item_klass(options[:of]), value)
+          klass_const = item_klass(options[:of])
+          value.is_a?(klass_const) ? value : ShallowAttributes::Type.coerce(klass_const, value)
         end
       end
 
