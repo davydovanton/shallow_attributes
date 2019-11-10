@@ -1,4 +1,5 @@
 require 'shallow_attributes/type/array'
+require 'shallow_attributes/type/mutable_array'
 require 'shallow_attributes/type/boolean'
 require 'shallow_attributes/type/date_time'
 require 'shallow_attributes/type/float'
