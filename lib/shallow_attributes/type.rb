@@ -7,6 +7,13 @@ require 'shallow_attributes/type/string'
 require 'shallow_attributes/type/time'
 require 'shallow_attributes/type/date'
 
+# Boolean class for working with bool values
+#
+# @private
+#
+# @since 0.9.4
+class Boolean; end
+
 module ShallowAttributes
   # Namespace for standard type classes
   #
@@ -30,7 +37,8 @@ module ShallowAttributes
       ::Integer  => ShallowAttributes::Type::Integer.new,
       ::String   => ShallowAttributes::Type::String.new,
       ::Time     => ShallowAttributes::Type::Time.new,
-      ::Date     => ShallowAttributes::Type::Date.new
+      ::Date     => ShallowAttributes::Type::Date.new,
+      ::Boolean     => ShallowAttributes::Type::Boolean.new
     }.freeze
 
     class << self
@@ -56,7 +64,10 @@ module ShallowAttributes
       #
       # @since 0.1.0
       def coerce(type, value, options = {})
-        type_instance(type).coerce(value, options)
+        instance = type_instance(type, value)
+        return instance.coerce(instance.attributes, options) if instance.respond_to? :attributes
+
+        instance.coerce(value, options)
       end
 
     private
@@ -78,8 +89,14 @@ module ShallowAttributes
       # @return [Class]
       #
       # @since 0.1.0
-      def type_instance(klass)
-        DEFAULT_TYPE_OBJECTS[klass] || ShallowAttributes::Type.const_get(klass.name).new
+      def type_instance(klass, value = {})
+        return DEFAULT_TYPE_OBJECTS[klass] if DEFAULT_TYPE_OBJECTS[klass]
+
+        instantiable = ShallowAttributes::Type.const_get(klass.name)
+
+        return instantiable.new(value) if instantiable < ShallowAttributes
+
+        instantiable.new
       end
     end
   end
