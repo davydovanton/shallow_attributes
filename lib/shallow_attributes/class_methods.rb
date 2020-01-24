@@ -17,6 +17,14 @@ module ShallowAttributes
       if respond_to?(:default_values)
         subclass.default_values.merge!(default_values)
       end
+
+      if respond_to?(:descriptions)
+        subclass.default_values.merge!(default_values)
+      end
+
+      if respond_to?(:formats)
+        subclass.default_values.merge!(default_values)
+      end
     end
 
     # Returns hash that contains default values for each attribute
