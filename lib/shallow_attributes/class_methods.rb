@@ -19,11 +19,11 @@ module ShallowAttributes
       end
 
       if respond_to?(:descriptions)
-        subclass.default_values.merge!(default_values)
+        subclass.descriptions.merge!(descriptions)
       end
 
       if respond_to?(:formats)
-        subclass.default_values.merge!(default_values)
+        subclass.formats.merge!(formats)
       end
     end
 
