@@ -14,16 +14,16 @@ module ShallowAttributes
     #
     def inherited(subclass)
       super
-      if respond_to?(:default_values)
-        subclass.default_values.merge!(default_values)
-      end
-
       if respond_to?(:descriptions)
         subclass.descriptions.merge!(descriptions)
       end
 
       if respond_to?(:formats)
         subclass.formats.merge!(formats)
+      end
+
+      if respond_to?(:default_values)
+        subclass.default_values.merge!(default_values)
       end
     end
 
