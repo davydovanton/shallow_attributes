@@ -14,6 +14,14 @@ module ShallowAttributes
     #
     def inherited(subclass)
       super
+      if respond_to?(:descriptions)
+        subclass.descriptions.merge!(descriptions)
+      end
+
+      if respond_to?(:formats)
+        subclass.formats.merge!(formats)
+      end
+
       if respond_to?(:default_values)
         subclass.default_values.merge!(default_values)
       end
@@ -39,6 +47,14 @@ module ShallowAttributes
     # @since 0.10.0
     def mandatory_attributes
       @mandatory_attributes ||= {}
+    end
+
+    def descriptions
+      @descriptions ||= {}
+    end
+
+    def formats
+      @formats ||= {}
     end
 
     # Returns all class attributes.
@@ -88,6 +104,8 @@ module ShallowAttributes
 
       default_values[name] = options.delete(:default)
       mandatory_attributes[name] = options.delete(:present)
+      descriptions[name] = options.delete(:desc)
+      formats[name] = options.delete(:format)
 
       initialize_setter(name, type, options)
       initialize_getter(name)
