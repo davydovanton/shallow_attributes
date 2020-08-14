@@ -152,5 +152,28 @@ describe ShallowAttributes do
         end
       end
     end
+    describe 'when custom type receives parameters not considered as attributes' do
+      let(:person) do
+        Person.new(
+            name: 'John',
+            address: {
+                street: 'Street',
+                number: '12'
+            }
+        )
+      end
+
+      it 'ignores the non existence parameter' do
+        hash = person.attributes
+        hash.must_equal({
+            name: 'John',
+            addresses: [],
+            address: {
+                street: 'Street',
+                zipcode: '111111'
+            }
+        })
+      end
+    end
   end
 end
